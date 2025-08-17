@@ -1,64 +1,72 @@
 #!/bin/bash
 
 echo "🚀 Configurando Copiloto PDF..."
+echo "================================"
 
-# Verificar si Docker está instalado
+# Colores para output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+print_status() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+print_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+# Verificar prerrequisitos
+print_status "Verificando prerrequisitos..."
+
 if ! command -v docker &> /dev/null; then
-    echo "❌ Docker no está instalado. Por favor instala Docker primero."
+    print_error "Docker no está instalado. Por favor instala Docker primero."
     exit 1
 fi
 
-# Verificar si Docker Compose está instalado
 if ! command -v docker-compose &> /dev/null; then
-    echo "❌ Docker Compose no está instalado. Por favor instala Docker Compose primero."
+    print_error "Docker Compose no está instalado. Por favor instala Docker Compose primero."
     exit 1
 fi
 
-# Crear archivo .env si no existe
+print_success "Docker y Docker Compose están instalados"
+
+# Configurar archivo .env
+print_status "Configurando variables de entorno..."
+
 if [ ! -f .env ]; then
-    echo "📝 Creando archivo .env desde env.example..."
+    print_warning "Creando archivo .env desde env.example..."
     cp env.example .env
-    echo "⚠️  IMPORTANTE: Edita el archivo .env y agrega tu API key de OpenAI"
-    echo "   OPENAI_API_KEY=tu_api_key_de_openai_aqui"
+    print_warning "⚠️  IMPORTANTE: Edita el archivo .env y agrega tu API key de OpenAI"
+    print_warning "   OPENAI_API_KEY=tu_api_key_de_openai_aqui"
 else
-    echo "✅ Archivo .env ya existe"
+    print_success "Archivo .env encontrado"
 fi
 
-# Verificar si la API key está configurada
+# Verificar API key
 if grep -q "tu_api_key_de_openai_aqui" .env; then
-    echo "⚠️  ADVERTENCIA: No has configurado tu API key de OpenAI en .env"
-    echo "   Por favor edita el archivo .env y agrega tu API key real"
+    print_warning "⚠️  API key de OpenAI no configurada en .env"
+    print_warning "   Por favor edita el archivo .env y agrega tu API key real"
+else
+    print_success "API key de OpenAI configurada"
 fi
 
 echo ""
-echo "🔧 Construyendo y levantando los contenedores..."
-echo "   Esto puede tomar varios minutos en la primera ejecución..."
+print_status "Iniciando AUTO-FIX para configuración completa..."
+echo ""
 
-# Construir y levantar los contenedores
-docker-compose up --build -d
+# Ejecutar auto-fix
+./auto-fix.sh
 
 echo ""
-echo "⏳ Esperando que los servicios estén listos..."
-sleep 10
-
-# Verificar el estado de los contenedores
-echo ""
-echo "📊 Estado de los contenedores:"
-docker-compose ps
-
-echo ""
-echo "🌐 URLs de acceso:"
-echo "   Frontend: http://localhost:3000"
-echo "   Backend API: http://localhost:8000"
-echo "   Documentación API: http://localhost:8000/docs"
-echo "   Qdrant Dashboard: http://localhost:6333/dashboard"
-
-echo ""
-echo "📋 Comandos útiles:"
-echo "   Ver logs: docker-compose logs -f"
-echo "   Detener: docker-compose down"
-echo "   Reiniciar: docker-compose restart"
-echo "   Limpiar todo: docker-compose down -v"
-
-echo ""
-echo "✅ Setup completado! 🎉"
+print_success "✅ Setup completado exitosamente!"
