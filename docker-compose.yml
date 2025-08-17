@@ -26,11 +26,27 @@ services:
     ports:
       - "8000:8000"
     environment:
+      # OpenAI Configuration
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - OPENAI_EMBEDDING_MODEL=${OPENAI_EMBEDDING_MODEL:-text-embedding-3-large}
+      
+      # Qdrant Configuration
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
-      - VECTOR_SIZE=3072
-      - MAX_PDFS=5
+      
+      # Application Configuration
+      - VECTOR_SIZE=${VECTOR_SIZE:-3072}
+      - MAX_PDFS=${MAX_PDFS:-5}
+      - MAX_FILE_SIZE=${MAX_FILE_SIZE:-52428800}
+      - CHUNK_SIZE=${CHUNK_SIZE:-1000}
+      
+      # Performance Configuration
+      - MAX_RETRIES=${MAX_RETRIES:-3}
+      - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-30}
+      
+      # Logging Configuration
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
     volumes:
       - ./backend:/app
       - temp_pdfs:/app/temp

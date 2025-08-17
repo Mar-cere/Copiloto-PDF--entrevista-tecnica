@@ -1,20 +1,23 @@
 # Copiloto PDF - Análisis Inteligente de Documentos
 
-Una aplicación web moderna que permite analizar documentos PDF utilizando inteligencia artificial. La aplicación incluye funcionalidades de chat conversacional, generación de resúmenes, comparación de documentos y clasificación automática de temas.
+Una aplicación web que permite analizar documentos PDF utilizando inteligencia artificial. La aplicación incluye funcionalidades de chat conversacional, generación de resúmenes, comparación de documentos y clasificación automática de temas.
 
 ## 🚀 Características
 
 ### ✅ Funcionalidades Principales
-- **Subida de hasta 5 PDFs** con límite configurado
-- **Extracción, división y vectorización** del contenido
-- **Interfaz conversacional** para hacer preguntas sobre los documentos
-- **Orquestación estructurada** con arquitectura modular y extensible
+- **Subida de hasta 5 PDFs** con límite configurado (50MB por archivo)
+- **Extracción inteligente** con limpieza y normalización de texto
+- **Chunking avanzado** que respeta la estructura natural del documento
+- **Chat conversacional robusto** con búsqueda semántica mejorada
+- **Arquitectura modular** con manejo robusto de errores
 
 ### 💡 Funcionalidades Avanzadas
-- **Resumen automático** de contenido generado por IA
-- **Comparación automática** entre documentos
-- **Clasificación por temas** y tópicos
-- **Chat contextual** específico por documento
+- **Resumen automático** con prompts optimizados por tipo de contenido
+- **Comparación inteligente** entre documentos con análisis estructurado
+- **Clasificación por temas** con identificación de tópicos principales y secundarios
+- **Búsqueda híbrida** combinando embeddings y búsqueda de texto
+- **Cache de embeddings** para optimizar rendimiento y costos
+- **Métricas y analytics** del sistema y uso de documentos
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -52,14 +55,19 @@ Copiar el archivo de ejemplo y configurar las variables:
 cp env.example .env
 ```
 
-Editar el archivo `.env` y agregar tu API key de OpenAI:
+Editar el archivo `.env` y configurar las variables necesarias:
+
 ```bash
-# OpenAI Configuration
+# ========================================
+# CONFIGURACIÓN REQUERIDA
+# ========================================
+
+# OpenAI API Key (REQUERIDO)
 OPENAI_API_KEY=tu_api_key_de_openai_aqui
 
-# Qdrant Configuration
-QDRANT_HOST=qdrant
-QDRANT_PORT=6333
+# ========================================
+# CONFIGURACIÓN DE SERVICIOS
+# ========================================
 
 # Backend Configuration
 BACKEND_HOST=0.0.0.0
@@ -67,6 +75,44 @@ BACKEND_PORT=8000
 
 # Frontend Configuration
 FRONTEND_PORT=3000
+
+# Qdrant Configuration
+QDRANT_HOST=qdrant
+QDRANT_PORT=6333
+
+# ========================================
+# CONFIGURACIÓN DE LA APLICACIÓN
+# ========================================
+
+# Límites de la aplicación
+MAX_PDFS=5
+MAX_FILE_SIZE=52428800  # 50MB en bytes
+CHUNK_SIZE=1000
+
+# Configuración de vectores
+VECTOR_SIZE=3072
+
+# ========================================
+# CONFIGURACIÓN DE OPENAI (OPCIONAL)
+# ========================================
+
+# Modelos de OpenAI
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_EMBEDDING_MODEL=text-embedding-3-large
+
+# ========================================
+# CONFIGURACIÓN DE RENDIMIENTO (OPCIONAL)
+# ========================================
+
+# Reintentos y timeouts
+MAX_RETRIES=3
+REQUEST_TIMEOUT=30
+
+# ========================================
+# CONFIGURACIÓN DE LOGGING (OPCIONAL)
+# ========================================
+
+LOG_LEVEL=INFO
 ```
 
 ### 3. Levantar con Docker Compose
@@ -105,6 +151,40 @@ La aplicación estará disponible en:
 ### 5. Clasificar Temas
 - En la página de resúmenes, haz clic en "Clasificar"
 - La IA identificará temas principales y secundarios
+
+## 🔧 Configuración Avanzada
+
+### Variables de Entorno Adicionales
+```bash
+# Configuración de OpenAI
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_EMBEDDING_MODEL=text-embedding-3-large
+
+# Configuración de Qdrant
+QDRANT_COLLECTION_NAME=pdf_chunks
+VECTOR_SIZE=3072
+
+# Configuración de la aplicación
+MAX_PDFS=5
+CHUNK_SIZE=1000
+MAX_FILE_SIZE=52428800  # 50MB
+
+# Configuración de rendimiento
+MAX_RETRIES=3
+REQUEST_TIMEOUT=30
+```
+
+### Endpoints de Monitoreo
+- **`/health`** - Estado de salud de la API
+- **`/status`** - Información del sistema y métricas
+- **`/debug/search/{pdf_name}`** - Endpoint de debug para búsquedas
+
+### Características Técnicas
+- **Cache de Embeddings**: Reduce costos y mejora rendimiento
+- **Búsqueda Híbrida**: Combina embeddings y búsqueda de texto
+- **Score Adaptativo**: Ajusta automáticamente la relevancia
+- **Chunking Inteligente**: Respeta la estructura natural del documento
+- **Manejo Robusto de Errores**: Logging detallado y recuperación automática
 
 ## 🏗️ Arquitectura del Proyecto
 
@@ -179,6 +259,29 @@ npm run dev
 - Elimina algunos documentos existentes
 - El límite es de 5 PDFs por instancia
 
+### Error: "Query de búsqueda vacía"
+- Verifica que estés enviando un mensaje válido
+- El sistema ahora maneja mejor las queries vacías
+
+### Error: "No se encontraron chunks relevantes"
+- Intenta reformular tu pregunta
+- Especifica un documento particular
+- El sistema intentará automáticamente con score más bajo
+
+### Error: "OpenAI API Key inválida"
+- Verifica que tu API key sea correcta
+- Asegúrate de tener créditos en tu cuenta de OpenAI
+
+### Error: "Qdrant no está disponible"
+- Verifica que el contenedor de Qdrant esté ejecutándose
+- Revisa los logs: `docker-compose logs qdrant`
+- Asegúrate de que el puerto 6333 esté disponible
+
+### Debug y Monitoreo
+- Usa `/status` para ver el estado del sistema
+- Usa `/debug/search/{pdf_name}` para probar búsquedas
+- Revisa los logs: `docker-compose logs backend`
+
 ## 📝 API Endpoints
 
 ### Documentos
@@ -192,30 +295,10 @@ npm run dev
 - `POST /compare` - Comparar documentos
 - `GET /classify/{pdf_name}` - Clasificar temas
 
-## 🤝 Contribuir
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
 ## 👨‍💻 Autor
 
 **Tu Nombre**
-- GitHub: [@tu-usuario](https://github.com/tu-usuario)
-
-## 🙏 Agradecimientos
-
-- OpenAI por proporcionar las APIs de IA
-- FastAPI por el excelente framework
-- React por la biblioteca de interfaz de usuario
-- Qdrant por la base de datos vectorial
+- Correo: marcelo0.nicolas@gmail.com
+- Celular: +56934522191
 
 ---
-
-⭐ Si este proyecto te resulta útil, ¡dale una estrella en GitHub!
