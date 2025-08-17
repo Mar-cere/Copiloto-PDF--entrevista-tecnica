@@ -21,7 +21,6 @@ COPY . .
 
 # Cambiar permisos y propietario
 RUN chown -R nextjs:nodejs /app
-USER nextjs
 
 # Exponer puerto
 EXPOSE 3000
@@ -30,5 +29,5 @@ EXPOSE 3000
 ENV NODE_ENV=development
 ENV VITE_API_URL=http://localhost:8000
 
-# Comando por defecto
+# Comando por defecto (ejecutar como root para desarrollo)
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]

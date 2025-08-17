@@ -323,14 +323,26 @@ npm run dev
 
 ### Limpiar y reconstruir todo
 ```bash
-# Detener y limpiar todo
+# Opción 1: Script automático (recomendado)
+./clean-and-rebuild.sh
+
+# Opción 2: Manual
 docker-compose down -v
+docker rmi -f copiloto-pdf--entrevista-tecnica-backend copiloto-pdf--entrevista-tecnica-frontend
+docker system prune -f
+docker-compose build --no-cache
+docker-compose up -d
+```
 
-# Eliminar imágenes
-docker rmi copiloto-pdf--entrevista-tecnica-backend copiloto-pdf--entrevista-tecnica-frontend
+### Diagnóstico de problemas
+```bash
+# Ejecutar diagnóstico completo
+./debug.sh
 
-# Reconstruir desde cero
-./setup.sh
+# Ver logs específicos
+docker-compose logs backend
+docker-compose logs frontend
+docker-compose logs qdrant
 ```
 
 ## 📝 API Endpoints
