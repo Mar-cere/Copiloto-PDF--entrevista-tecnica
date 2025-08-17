@@ -46,7 +46,7 @@ Una aplicación web que permite analizar documentos PDF utilizando inteligencia 
 ### 1. Clonar el Repositorio
 ```bash
 git clone https://github.com/Mar-cere/Copiloto-PDF--entrevista-tecnica
-cd copiloto-pdf
+cd Copiloto-PDF--entrevista-tecnica
 ```
 
 ### 2. Configurar Variables de Entorno
