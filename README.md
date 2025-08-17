@@ -32,9 +32,9 @@ cp env.example .env
 # Editar .env y agregar tu API key de OpenAI
 ```
 
-### 3. Ejecutar AUTO-FIX
+### 3. Ejecutar Setup
 ```bash
-./auto-fix.sh
+./setup.sh
 ```
 
 ¡Listo! La aplicación estará disponible en:
@@ -62,28 +62,24 @@ docker-compose logs -f
 docker-compose down
 
 # Si hay problemas
-./auto-fix.sh
+./setup.sh
 ```
 
 ## 🚨 Solución de Problemas
 
 ### Solución Automática (Recomendada)
 ```bash
-./auto-fix.sh
+./setup.sh
 ```
 
 ### Problemas Comunes
-- **"vite: not found"** → `./auto-fix.sh`
+- **"vite: not found"** → `./setup.sh`
 - **"OpenAI API Key inválida"** → Verificar `.env`
 - **"Qdrant no disponible"** → `docker-compose logs qdrant`
 
 ## 📋 Scripts Disponibles
 
-- **`./auto-fix.sh`** - Solución automática completa ⭐
-- **`./setup.sh`** - Configuración inicial
-- **`./debug.sh`** - Diagnóstico del sistema
-- **`./clean-and-rebuild.sh`** - Limpieza completa
-- **`./SOLO-EJECUTAR-ESTO.sh`** - Versión con confirmación
+- **`./setup.sh`** - Configuración completa y solución automática ⭐
 
 ## 🏗️ Arquitectura
 
@@ -92,7 +88,7 @@ copiloto-pdf/
 ├── backend/          # FastAPI + OpenAI + Qdrant
 ├── frontend/         # React + Vite
 ├── docker-compose.yml
-├── auto-fix.sh       # ⭐ Solución automática
+├── setup.sh          # ⭐ Configuración completa
 └── README.md
 ```
 
@@ -116,4 +112,4 @@ MIT License - ver [LICENSE](LICENSE) para detalles.
 
 ---
 
-⭐ **¿Problemas? Ejecuta `./auto-fix.sh` y todo se solucionará automáticamente.**
+⭐ **¿Problemas? Ejecuta `./setup.sh` y todo se solucionará automáticamente.**

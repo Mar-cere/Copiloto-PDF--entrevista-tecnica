@@ -62,11 +62,49 @@ else
 fi
 
 echo ""
-print_status "Iniciando AUTO-FIX para configuración completa..."
-echo ""
+print_status "Limpiando y reconstruyendo contenedores..."
 
-# Ejecutar auto-fix
-./auto-fix.sh
+# Detener y limpiar contenedores existentes
+print_status "Deteniendo contenedores..."
+docker-compose down -v 2>/dev/null || true
+
+# Limpiar imágenes y cache
+print_status "Limpiando cache de Docker..."
+docker system prune -f 2>/dev/null || true
+
+# Reconstruir con --no-cache
+print_status "Reconstruyendo imágenes..."
+docker-compose build --no-cache
+
+# Levantar servicios
+print_status "Levantando servicios..."
+docker-compose up -d
+
+# Esperar a que los servicios estén listos
+print_status "Esperando que los servicios estén listos..."
+sleep 15
+
+# Verificar estado de los contenedores
+print_status "Verificando estado de los servicios..."
+if docker-compose ps | grep -q "Up"; then
+    print_success "✅ Todos los servicios están ejecutándose"
+else
+    print_error "❌ Algunos servicios no están ejecutándose"
+    print_status "Mostrando logs de error..."
+    docker-compose logs --tail=20
+    exit 1
+fi
 
 echo ""
 print_success "✅ Setup completado exitosamente!"
+echo ""
+print_status "🌐 URLs de acceso:"
+echo "   Frontend: http://localhost:3000"
+echo "   Backend API: http://localhost:8000"
+echo "   Documentación API: http://localhost:8000/docs"
+echo "   Qdrant Dashboard: http://localhost:6333/dashboard"
+echo ""
+print_status "📋 Comandos útiles:"
+echo "   Ver logs: docker-compose logs -f"
+echo "   Detener: docker-compose down"
+echo "   Reiniciar: docker-compose restart"
