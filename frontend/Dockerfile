@@ -6,10 +6,6 @@ WORKDIR /app
 # Instalar dependencias del sistema
 RUN apk add --no-cache git
 
-# Crear usuario no-root para seguridad
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
-
 # Copiar archivos de dependencias
 COPY package*.json ./
 
@@ -19,9 +15,6 @@ RUN npm ci && npm cache clean --force
 # Copiar código del frontend
 COPY . .
 
-# Cambiar permisos y propietario
-RUN chown -R nextjs:nodejs /app
-
 # Exponer puerto
 EXPOSE 3000
 
@@ -29,5 +22,5 @@ EXPOSE 3000
 ENV NODE_ENV=development
 ENV VITE_API_URL=http://localhost:8000
 
-# Comando por defecto (ejecutar como root para desarrollo)
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
+# Comando por defecto
+CMD ["sh", "-c", "npm run dev -- --host 0.0.0.0 --port 3000"]

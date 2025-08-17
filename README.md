@@ -305,7 +305,14 @@ npm run dev
 
 ### Error: "vite: not found"
 - El frontend no puede encontrar Vite
-- **Solución**: Reconstruir la imagen: `docker-compose build frontend`
+- **Solución 1**: Script automático: `./fix-frontend.sh`
+- **Solución 2**: Manual:
+  ```bash
+  docker-compose stop frontend
+  docker rmi -f copiloto-pdf--entrevista-tecnica-frontend:latest
+  docker-compose build --no-cache frontend
+  docker-compose up -d frontend
+  ```
 
 ### Error: "TypeError: Client.__init__() got an unexpected keyword argument 'proxies'"
 - Problema con la versión de OpenAI client
