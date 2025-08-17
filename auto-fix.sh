@@ -96,6 +96,19 @@ if [ $? -ne 0 ]; then
     docker-compose build --no-cache frontend
 fi
 
+# Verificación específica para Vite
+print_status "Verificando instalación de Vite..."
+FRONTEND_TEST=$(docker-compose run --rm frontend sh -c "npx vite --version" 2>&1)
+if echo "$FRONTEND_TEST" | grep -q "vite"; then
+    print_success "✅ Vite instalado correctamente"
+else
+    print_warning "⚠️  Vite no encontrado, aplicando solución específica..."
+    print_status "Reconstruyendo frontend con configuración específica de Vite..."
+    docker-compose stop frontend
+    docker rmi -f copiloto-pdf--entrevista-tecnica-frontend:latest 2>/dev/null || true
+    docker-compose build --no-cache frontend
+fi
+
 # Levantar servicios
 print_status "Levantando servicios..."
 docker-compose up -d

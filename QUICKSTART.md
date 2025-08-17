@@ -12,8 +12,8 @@
 git clone <tu-repositorio>
 cd copiloto-pdf
 
-# Configuración automática
-./setup.sh
+# AUTO-FIX: Configuración automática completa
+./auto-fix.sh
 ```
 
 ### 3. Configurar API Key

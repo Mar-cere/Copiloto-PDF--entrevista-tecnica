@@ -117,12 +117,24 @@ LOG_LEVEL=INFO
 
 ### 3. Levantar con Docker Compose
 
-#### Opción A: Script automático (Recomendado)
+#### 🚀 Opción A: AUTO-FIX (Recomendado - Soluciona todo automáticamente)
+```bash
+./auto-fix.sh
+```
+**Este script:**
+- ✅ Detecta y soluciona problemas automáticamente
+- ✅ Verifica prerrequisitos
+- ✅ Configura variables de entorno
+- ✅ Limpia cache y reconstruye imágenes
+- ✅ Verifica que todo funcione correctamente
+- ✅ Proporciona diagnóstico completo
+
+#### Opción B: Setup básico
 ```bash
 ./setup.sh
 ```
 
-#### Opción B: Manual
+#### Opción C: Manual
 ```bash
 # Crear archivo .env si no existe
 cp env.example .env
@@ -134,7 +146,7 @@ cp env.example .env
 docker-compose up --build
 ```
 
-#### Opción C: Desarrollo con Hot Reload
+#### Opción D: Desarrollo con Hot Reload
 ```bash
 # Para desarrollo con recarga automática
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
@@ -305,8 +317,10 @@ npm run dev
 
 ### Error: "vite: not found"
 - El frontend no puede encontrar Vite
-- **Solución 1**: Script automático: `./fix-frontend.sh`
-- **Solución 2**: Manual:
+- **Solución 1**: AUTO-FIX completo: `./auto-fix.sh` ⭐
+- **Solución 2**: Solo Vite: `./fix-vite.sh`
+- **Solución 3**: Prueba Vite: `./test-vite.sh`
+- **Solución 4**: Manual:
   ```bash
   docker-compose stop frontend
   docker rmi -f copiloto-pdf--entrevista-tecnica-frontend:latest
@@ -328,9 +342,15 @@ npm run dev
 - Revisa los logs: `docker-compose logs qdrant`
 - Asegúrate de que el puerto 6333 esté disponible
 
+### 🚀 Solución automática para todos los problemas
+```bash
+# AUTO-FIX: Soluciona todo automáticamente (RECOMENDADO)
+./auto-fix.sh
+```
+
 ### Limpiar y reconstruir todo
 ```bash
-# Opción 1: Script automático (recomendado)
+# Opción 1: Script automático
 ./clean-and-rebuild.sh
 
 # Opción 2: Manual

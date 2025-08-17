@@ -10,7 +10,10 @@ RUN apk add --no-cache git
 COPY package*.json ./
 
 # Instalar dependencias (incluyendo devDependencies para Vite)
-RUN npm ci && npm cache clean --force
+RUN npm ci --include=dev && npm cache clean --force
+
+# Verificar que Vite esté instalado
+RUN npx vite --version
 
 # Copiar código del frontend
 COPY . .
@@ -23,4 +26,4 @@ ENV NODE_ENV=development
 ENV VITE_API_URL=http://localhost:8000
 
 # Comando por defecto
-CMD ["sh", "-c", "npm run dev -- --host 0.0.0.0 --port 3000"]
+CMD ["sh", "-c", "npx vite --host 0.0.0.0 --port 3000"]
