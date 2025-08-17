@@ -108,8 +108,8 @@ MIT License - ver [LICENSE](LICENSE) para detalles.
 
 ## 👨‍💻 Autor
 
-**Marcelo Ull** - [GitHub](https://github.com/Mar-cere
+**Marcelo Ull** - [GitHub](https://github.com/Mar-cere)
+- **Email**: marcelo0.nicolas@gmail.com
+- **Celular**: +56934522191
 
 ---
-
-⭐ **¿Problemas? Ejecuta `./setup.sh` y todo se solucionará automáticamente.**
