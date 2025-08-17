@@ -45,7 +45,7 @@ Una aplicación web que permite analizar documentos PDF utilizando inteligencia 
 
 ### 1. Clonar el Repositorio
 ```bash
-git clone https://github.com/tu-usuario/copiloto-pdf.git
+git clone https://github.com/Mar-cere/Copiloto-PDF--entrevista-tecnica
 cd copiloto-pdf
 ```
 
@@ -116,14 +116,35 @@ LOG_LEVEL=INFO
 ```
 
 ### 3. Levantar con Docker Compose
+
+#### Opción A: Script automático (Recomendado)
 ```bash
+./setup.sh
+```
+
+#### Opción B: Manual
+```bash
+# Crear archivo .env si no existe
+cp env.example .env
+
+# Editar .env y agregar tu API key de OpenAI
+# OPENAI_API_KEY=tu_api_key_de_openai_aqui
+
+# Construir y levantar
 docker-compose up --build
+```
+
+#### Opción C: Desarrollo con Hot Reload
+```bash
+# Para desarrollo con recarga automática
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ```
 
 La aplicación estará disponible en:
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8000
 - **Documentación API**: http://localhost:8000/docs
+- **Qdrant Dashboard**: http://localhost:6333/dashboard
 
 ## 📖 Uso de la Aplicación
 
@@ -281,6 +302,36 @@ npm run dev
 - Usa `/status` para ver el estado del sistema
 - Usa `/debug/search/{pdf_name}` para probar búsquedas
 - Revisa los logs: `docker-compose logs backend`
+
+### Error: "vite: not found"
+- El frontend no puede encontrar Vite
+- **Solución**: Reconstruir la imagen: `docker-compose build frontend`
+
+### Error: "TypeError: Client.__init__() got an unexpected keyword argument 'proxies'"
+- Problema con la versión de OpenAI client
+- **Solución**: Reconstruir la imagen: `docker-compose build backend`
+
+### Error: "OpenAI API Key inválida"
+- Verifica que tu API key esté en el archivo `.env`
+- Asegúrate de que no tenga espacios extra
+- Verifica que tengas créditos en tu cuenta de OpenAI
+
+### Error: "Qdrant no está disponible"
+- Verifica que el contenedor de Qdrant esté ejecutándose
+- Revisa los logs: `docker-compose logs qdrant`
+- Asegúrate de que el puerto 6333 esté disponible
+
+### Limpiar y reconstruir todo
+```bash
+# Detener y limpiar todo
+docker-compose down -v
+
+# Eliminar imágenes
+docker rmi copiloto-pdf--entrevista-tecnica-backend copiloto-pdf--entrevista-tecnica-frontend
+
+# Reconstruir desde cero
+./setup.sh
+```
 
 ## 📝 API Endpoints
 

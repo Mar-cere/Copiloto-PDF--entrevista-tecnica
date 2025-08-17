@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Establecer directorio de trabajo
 WORKDIR /app
@@ -13,8 +13,8 @@ RUN adduser -S nextjs -u 1001
 # Copiar archivos de dependencias
 COPY package*.json ./
 
-# Instalar dependencias
-RUN npm ci --only=production && npm cache clean --force
+# Instalar dependencias (incluyendo devDependencies para Vite)
+RUN npm ci && npm cache clean --force
 
 # Copiar código del frontend
 COPY . .

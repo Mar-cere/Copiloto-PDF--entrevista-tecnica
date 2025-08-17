@@ -24,7 +24,7 @@ MAX_RETRIES = int(os.getenv("MAX_RETRIES", "3"))
 REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "30"))
 
 # Inicializar clientes
-client = OpenAI(api_key=OPENAI_API_KEY, timeout=REQUEST_TIMEOUT)
+client = OpenAI(api_key=OPENAI_API_KEY)
 qdrant = QdrantClient(url=f"http://{QDRANT_HOST}:{QDRANT_PORT}")
 
 # Cache simple para embeddings
